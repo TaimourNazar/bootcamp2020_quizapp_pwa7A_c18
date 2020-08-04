@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import QuestionCard from './components/QuestionCard';
 import {fetchQuizQuestions,QuestionState,Difficulty} from './api/API';
 import {GlobalStyle, Wrapper} from './styles/App.styles';
+import firebase from './firebase';
 
 export type AnswerObject={
   question: string;
@@ -13,6 +14,16 @@ export type AnswerObject={
 let  TOTAL_QUESTIONS=10;
 
 const App = () => {
+/*  
+  const messaging=firebase.messaging();
+  messaging.requestPermission().then(()=>{
+    return messaging.getToken()
+  }).then((token)=>{
+    //alert(token);
+    prompt('token',token);
+    //console.log('token',token);
+  })
+*/
 
   const [loading, setLoading]=useState(false);
   const [questions, setQuestions]=useState<QuestionState[]>([]);
@@ -22,18 +33,24 @@ const App = () => {
   const [gameOver,setGameOver]=useState(true);
   const [Type,setType]=useState(9);
   const [DifficultyLevel,setDifficultyLevel]=useState<Difficulty>(Difficulty.EASY);
-  //console.log(questions);
 
   const startTrivia = async ()=>{
     setLoading(true);
     setGameOver(false);
 
-    const newQuestions=await fetchQuizQuestions(
-      TOTAL_QUESTIONS,
-      DifficultyLevel,
-      Type
-    );
-
+    let newQuestions:any;
+    await fetchQuizQuestions(TOTAL_QUESTIONS,DifficultyLevel,Type).then((result)=>{
+      console.log(result);
+      newQuestions=result;
+      localStorage.setItem("qlist",JSON.stringify(result));
+    }).catch(err=>{
+      console.log("internet not connected");
+      const qdata=localStorage.getItem("qlist");
+      //const qlist=collection?.length>0?collection:"";
+      const qlist=qdata===null?"":qdata;
+      newQuestions=JSON.parse(qlist);
+    })
+    
     setQuestions(newQuestions);
     setScore(0);
     setUserAnswers([]);
