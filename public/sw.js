@@ -19,7 +19,6 @@ this.addEventListener("install",(event)=>{
                "/manifest.json",
                "/favicon.ico",
                "/logo192.png",
-               "/static/js/2.14074dbb.chunk.js",
                "/static/js/0.chunk.js",
                "/"
             ])

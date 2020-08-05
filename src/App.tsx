@@ -15,19 +15,19 @@ let  TOTAL_QUESTIONS=10;
 
 const App = () => {
 
-  const [firebaseTokenStatus,setfirebaseTokenStatus]=useState(false);
+  //const [firebaseTokenStatus,setfirebaseTokenStatus]=useState(false);
 
   const messaging=firebase.messaging();
-  if(firebaseTokenStatus===false){
+  //if(firebaseTokenStatus===false){
     messaging.requestPermission().then(()=>{
       return messaging.getToken()
     }).then((token)=>{
-      setfirebaseTokenStatus(true);
+      //setfirebaseTokenStatus(true);
       //alert(token);
       prompt('token',token);
       //console.log('token',token);
     })
-  }
+  //}
 
   const [loading, setLoading]=useState(false);
   const [questions, setQuestions]=useState<QuestionState[]>([]);
