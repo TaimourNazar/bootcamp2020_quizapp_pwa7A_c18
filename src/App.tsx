@@ -20,8 +20,8 @@ const App = () => {
     return messaging.getToken()
   }).then((token)=>{
     //alert(token);
-    prompt('token',token);
-    //console.log('token',token);
+    //prompt('token',token);
+    console.log('token',token);
   })
 
 
