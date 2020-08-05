@@ -16,7 +16,6 @@ let  TOTAL_QUESTIONS=10;
 const App = () => {
 
   const [firebaseTokenStatus,setfirebaseTokenStatus]=useState(false);
-
   const messaging=firebase.messaging();
   if(firebaseTokenStatus===false){
     messaging.requestPermission().then(()=>{
