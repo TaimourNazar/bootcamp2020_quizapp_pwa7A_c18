@@ -14,7 +14,7 @@ export type AnswerObject={
 let  TOTAL_QUESTIONS=10;
 
 const App = () => {
-/*  
+
   const messaging=firebase.messaging();
   messaging.requestPermission().then(()=>{
     return messaging.getToken()
@@ -23,7 +23,7 @@ const App = () => {
     prompt('token',token);
     //console.log('token',token);
   })
-*/
+
 
   const [loading, setLoading]=useState(false);
   const [questions, setQuestions]=useState<QuestionState[]>([]);
@@ -33,6 +33,7 @@ const App = () => {
   const [gameOver,setGameOver]=useState(true);
   const [Type,setType]=useState(9);
   const [DifficultyLevel,setDifficultyLevel]=useState<Difficulty>(Difficulty.EASY);
+  const [mode,setMode]=useState('online');
 
   const startTrivia = async ()=>{
     setLoading(true);
@@ -40,11 +41,13 @@ const App = () => {
 
     let newQuestions:any;
     await fetchQuizQuestions(TOTAL_QUESTIONS,DifficultyLevel,Type).then((result)=>{
-      console.log(result);
+      setMode('online');
+      //console.log(result);
       newQuestions=result;
       localStorage.setItem("qlist",JSON.stringify(result));
     }).catch(err=>{
-      console.log("internet not connected");
+      setMode('offline');
+      //console.log("internet not connected");
       const qdata=localStorage.getItem("qlist");
       //const qlist=collection?.length>0?collection:"";
       const qlist=qdata===null?"":qdata;
@@ -112,24 +115,30 @@ const App = () => {
     <GlobalStyle/>
     <Wrapper>
       <h1>Quiz App</h1>
+      {
+        mode==='offline'?<label>Your are in offline mode</label>:null
+      }
       {gameOver || userAnswers.length===TOTAL_QUESTIONS?(
           <section>
-            <label>Category:</label>
-            <select onChange={selectType}>
-              <option value="9">General Knowledge</option>
-              <option value="15">Video Games</option>
-              <option value="17">Science & Nature</option>
-              <option value="18">Computers</option>
-              <option value="21">Sports</option>
-              <option value="28">Vehicles</option>
-            </select>
-            <br/>
-            <label>Difficulty:</label>
-            <select onChange={selectDifficulty}>
-              <option value="1">Easy</option>
-              <option value="2">Medium</option>
-              <option value="3">Hard</option>
-            </select>
+           {mode==='online'?
+            <>
+              <label>Category:</label>
+              <select onChange={selectType}>
+                <option value="9">General Knowledge</option>
+                <option value="15">Video Games</option>
+                <option value="17">Science & Nature</option>
+                <option value="18">Computers</option>
+                <option value="21">Sports</option>
+                <option value="28">Vehicles</option>
+              </select>
+              <br/>
+              <label>Difficulty:</label>
+              <select onChange={selectDifficulty}>
+                <option value="1">Easy</option>
+                <option value="2">Medium</option>
+                <option value="3">Hard</option>
+              </select>
+            </>:null}
             <hr/>
             <button className="start" onClick={startTrivia}>Start Quiz</button>
           </section>
