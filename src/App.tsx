@@ -23,7 +23,6 @@ const App = () => {
       return messaging.getToken()
     }).then((token)=>{
       //setfirebaseTokenStatus(true);
-      //alert(token);
       prompt('token',token);
       //console.log('token',token);
     })
